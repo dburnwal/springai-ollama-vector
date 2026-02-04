@@ -2,6 +2,8 @@
 package com.dburnwal.springai.config;
 
 
+import com.dburnwal.springai.tools.CalculatorService;
+import com.dburnwal.springai.tools.WeatherService;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -17,10 +19,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ChatClientConfig {
     @Bean
-    public ChatClient chatClient(ChatModel chatModel, ChatMemory chatMemory) {
+    public ChatClient chatClient(ChatModel chatModel, ChatMemory chatMemory,
+                                 WeatherService weatherService, CalculatorService calculatorService) {
         var chatMemoryAdvisor= MessageChatMemoryAdvisor.builder(chatMemory).build();
         return ChatClient.builder(chatModel)
                 .defaultAdvisors(new SimpleLoggerAdvisor(), chatMemoryAdvisor)
+                .defaultTools(weatherService, calculatorService)
                 .build();
     }
 }

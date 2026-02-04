@@ -1,6 +1,7 @@
 
 package com.dburnwal.springai.tools;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +10,7 @@ import java.util.Map;
 import java.util.Random;
 
 @Component
+@Slf4j
 public class WeatherService {
 
     // Request classes for function calling
@@ -27,6 +29,7 @@ public class WeatherService {
      */
     @Tool(name = "weather", description = "Get the current weather for a specific location")
     public Map<String, Object> getCurrentWeather(String location) {
+        log.info("Getting current weather for location: {}", location);
         Map<String, Object> weather = new HashMap<>();
         weather.put("location", location);
         weather.put("temperature", random.nextInt(30) + 5); // Random temp between 5-35°C
@@ -44,6 +47,7 @@ public class WeatherService {
      */
     @Tool(name = "forecast", description = "Get weather forecast for the next few days")
     public Map<String, Object> getWeatherForecast(String location, int days) {
+        log.info("Getting weather forecast for location: {} for {} days", location, days);
         Map<String, Object> forecast = new HashMap<>();
         forecast.put("location", location);
         forecast.put("days", Math.min(days, 7));
