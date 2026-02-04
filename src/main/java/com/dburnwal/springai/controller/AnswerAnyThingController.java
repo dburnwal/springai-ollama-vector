@@ -1,6 +1,7 @@
 package com.dburnwal.springai.controller;
 
 import com.dburnwal.springai.service.OllamaService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
+@Slf4j
 public class AnswerAnyThingController {
 
 	@Autowired
@@ -24,7 +26,6 @@ public class AnswerAnyThingController {
     @PostMapping("/askAnything")
     public String askAnything(@RequestParam("question") String question, Model model) {
     	ChatResponse response = service.generateAnswer(question);
-    	System.out.println(response);
     	model.addAttribute("question",question);
     	model.addAttribute("answer",response.getResult().getOutput().getText());
         return "askAnything";
