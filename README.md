@@ -12,6 +12,8 @@ A Spring Boot application that demonstrates integration with Ollama AI using Spr
 - Clean and responsive UI built with Thymeleaf
 - Automatic document initialization with duplicate prevention
 - REST API endpoints for document management and querying
+- Document similarity search with configurable parameters
+- Custom document ingestion support
 
 ## Technology Stack
 
@@ -198,6 +200,75 @@ Service class that implements RAG functionality:
 - Checks for existing documents to prevent duplicates
 - Performs similarity search and context-aware generation
 
+## RAG Implementation Details
+
+This project demonstrates a comprehensive Retrieval Augmented Generation (RAG) implementation using Spring AI with ChromaDB.
+
+### How RAG Works
+
+1. **Document Ingestion**: Documents are split into chunks and converted to embeddings using Ollama's embedding model
+2. **Vector Storage**: Embeddings are stored in ChromaDB vector database
+3. **Query Processing**: When a query is received:
+   - The query is converted to an embedding
+   - Similar documents are retrieved from ChromaDB
+   - Retrieved documents are used as context for the LLM
+   - The LLM generates a response based on the context
+
+### Customization Options
+
+#### Adding Custom Documents
+
+You can add your own documents through the REST API or by modifying the `DataInitializer` class:
+
+```java
+List<Document> customDocuments = List.of(
+    new Document("Your custom content here",
+        Map.of("type", "custom", "category", "general"))
+);
+ragService.addDocuments(customDocuments);
+```
+
+#### Adjusting Retrieval Parameters
+
+Modify the search parameters in `RAGService.java`:
+
+```java
+List<Document> similarDocuments = vectorStore.similaritySearch(
+    SearchRequest.query(userQuery)
+        .withTopK(4)  // Number of documents to retrieve
+        .withSimilarityThreshold(0.75)  // Minimum similarity score
+);
+```
+
+### API Examples
+
+#### Query with RAG
+```bash
+POST /api/rag/query
+Content-Type: application/json
+
+{
+  "query": "What is Spring AI?"}
+```
+
+#### Add Documents
+```bash
+POST /api/rag/documents
+Content-Type: application/json
+
+[
+  {
+    "content": "Your document content here",
+    "metadata": "Optional metadata"
+  }
+]
+```
+
+#### Similarity Search
+```bash
+GET /api/rag/search?query=Spring%20AI&topK=5
+```
+
 ### Configuration
 
 #### ChromaConfig
@@ -279,6 +350,12 @@ spring.ai.ollama.chat.options.max-tokens=1000
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Additional Resources
+
+- [Spring AI Documentation](https://docs.spring.io/spring-ai/reference/)
+- [ChromaDB Documentation](https://docs.trychroma.com/)
+- [Ollama Documentation](https://github.com/ollama/ollama)
 
 ## License
 
