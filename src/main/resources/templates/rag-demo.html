@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring AI RAG Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 2rem;
+        }
+        .container {
+            max-width: 900px;
+        }
+        .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .response-box {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            min-height: 100px;
+            white-space: pre-wrap;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+        }
+        .spinner-border {
+            width: 1rem;
+            height: 1rem;
+        }
+        .query-history {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .history-item {
+            padding: 0.5rem;
+            border-bottom: 1px solid #dee2e6;
+            cursor: pointer;
+        }
+        .history-item:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="text-center mb-4">
+            <h1 class="display-4">Spring AI RAG Demo</h1>
+            <p class="lead">Retrieval Augmented Generation with Milvus Vector Database</p>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Query the Knowledge Base</h5>
+                <div class="mb-3">
+                    <label for="queryInput" class="form-label">Enter your question:</label>
+                    <textarea 
+                        class="form-control" 
+                        id="queryInput" 
+                        rows="3" 
+                        placeholder="Ask anything about Spring AI, Milvus, or RAG..."
+                    ></textarea>
+                </div>
+                <div class="d-grid">
+                    <button class="btn btn-primary" onclick="submitQuery()">
+                        <span class="spinner-border spinner-border-sm loading" id="loadingSpinner"></span>
+                        <span id="buttonText">Submit Query</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="responseCard" style="display: none;">
+            <div class="card-body">
+                <h5 class="card-title">Response</h5>
+                <div class="response-box" id="responseBox"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Query History</h5>
+                <div class="query-history" id="queryHistory">
+                    <p class="text-muted text-center">No queries yet</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Sample Queries</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="useSampleQuery('What is Spring AI?')">
+                        What is Spring AI?
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="useSampleQuery('What is Milvus?')">
+                        What is Milvus?
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="useSampleQuery('Explain RAG')">
+                        Explain RAG
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="useSampleQuery('What models does Spring AI support?')">
+                        What models does Spring AI support?
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let queryHistory = [];
+
+        async function submitQuery() {
+            const queryInput = document.getElementById('queryInput');
+            const query = queryInput.value.trim();
+
+            if (!query) {
+                alert('Please enter a query');
+                return;
+            }
+
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const buttonText = document.getElementById('buttonText');
+            const responseCard = document.getElementById('responseCard');
+            const responseBox = document.getElementById('responseBox');
+
+            // Show loading state
+            loadingSpinner.style.display = 'inline-block';
+            buttonText.textContent = 'Processing...';
+            responseCard.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/rag/query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: query })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+
+                // Display response
+                responseBox.textContent = data.response;
+                responseCard.style.display = 'block';
+
+                // Add to history
+                addToHistory(query, data.response);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while processing your query. Please try again.');
+            } finally {
+                // Reset loading state
+                loadingSpinner.style.display = 'none';
+                buttonText.textContent = 'Submit Query';
+            }
+        }
+
+        function addToHistory(query, response) {
+            queryHistory.unshift({ query, response });
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            const historyContainer = document.getElementById('queryHistory');
+
+            if (queryHistory.length === 0) {
+                historyContainer.innerHTML = '<p class="text-muted text-center">No queries yet</p>';
+                return;
+            }
+
+            historyContainer.innerHTML = queryHistory.map((item, index) => `
+                <div class="history-item" onclick="useHistoryQuery(${index})">
+                    <strong>Q:</strong> ${item.query.substring(0, 50)}${item.query.length > 50 ? '...' : ''}
+                </div>
+            `).join('');
+        }
+
+        function useHistoryQuery(index) {
+            const item = queryHistory[index];
+            document.getElementById('queryInput').value = item.query;
+        }
+
+        function useSampleQuery(query) {
+            document.getElementById('queryInput').value = query;
+        }
+
+        // Allow Enter key to submit query (with Ctrl/Cmd)
+        document.getElementById('queryInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                submitQuery();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -11,4 +11,9 @@ public class WebController {
     public String index() {
         return "chat";
     }
+
+    @GetMapping("/rag-demo")
+    public String ragDemo() {
+        return "rag-demo";
+    }
 }

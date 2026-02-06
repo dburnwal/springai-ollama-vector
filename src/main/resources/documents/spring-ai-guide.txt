@@ -1,0 +1,119 @@
+Spring AI: A Comprehensive Guide
+
+Introduction to Spring AI
+=========================
+Spring AI is an application framework for AI engineering. Its goal is to help you build AI-powered applications using Spring. It provides abstractions that serve as the foundation for developing AI applications with portable API support for all major AI model providers.
+
+Core Features
+=============
+1. Portable API Support: Spring AI offers APIs that work across different AI providers, allowing you to switch between providers without changing your code.
+
+2. Model Support: The framework supports various AI models including:
+   - Chat models for conversational AI
+   - Text-to-image models for image generation
+   - Embedding models for semantic search
+   - Transcription models for speech-to-text
+
+3. Integration: Seamless integration with popular AI providers:
+   - OpenAI
+   - Azure OpenAI
+   - Ollama (for local models)
+   - And many others
+
+Vector Stores and RAG
+====================
+Spring AI provides comprehensive support for vector stores, which are essential for implementing Retrieval Augmented Generation (RAG) systems.
+
+Supported Vector Databases:
+- Milvus (open-source, scalable)
+- Pinecone (managed service)
+- Chroma (lightweight, open-source)
+- Weaviate (knowledge graph-based)
+- And more
+
+RAG Implementation
+==================
+Retrieval Augmented Generation (RAG) is a technique that combines:
+1. Retrieval-based AI: Finding relevant documents from a knowledge base
+2. Generative AI: Using retrieved documents as context to generate responses
+
+Benefits of RAG:
+- Reduces hallucinations in LLM responses
+- Provides up-to-date information
+- Allows for domain-specific knowledge
+- Improves response accuracy
+
+Getting Started with Spring AI
+==============================
+1. Add Dependencies:
+   Include Spring AI starters in your pom.xml or build.gradle
+
+2. Configure Models:
+   Set up your chosen AI provider in application.properties
+
+3. Create Services:
+   Implement RAGService to handle document retrieval and generation
+
+4. Build APIs:
+   Create REST endpoints to expose RAG functionality
+
+Best Practices
+=============
+1. Document Chunking:
+   - Split documents into manageable chunks (500-1000 tokens)
+   - Maintain context between chunks
+   - Use appropriate overlap between chunks
+
+2. Embedding Selection:
+   - Choose embeddings that match your use case
+   - Consider multilingual support if needed
+   - Evaluate embedding quality for your domain
+
+3. Vector Store Configuration:
+   - Optimize index types for your data
+   - Set appropriate similarity thresholds
+   - Monitor and tune performance
+
+4. Prompt Engineering:
+   - Design clear, specific prompts
+   - Include relevant context from retrieved documents
+   - Test and iterate on prompt templates
+
+Advanced Features
+================
+1. Multi-modal Support:
+   Spring AI supports working with different types of content including text, images, and audio.
+
+2. Function Calling:
+   Enable your AI models to call external functions and APIs for enhanced capabilities.
+
+3. Streaming Responses:
+   Implement real-time streaming of AI-generated content for better user experience.
+
+4. Custom Embeddings:
+   Use your own embedding models or fine-tune existing ones for specific domains.
+
+Troubleshooting
+===============
+Common Issues and Solutions:
+
+1. Connection Problems:
+   - Verify API keys and endpoints
+   - Check network connectivity
+   - Ensure services are running
+
+2. Performance Issues:
+   - Optimize document chunking
+   - Adjust vector store parameters
+   - Consider caching strategies
+
+3. Quality Issues:
+   - Improve prompt templates
+   - Increase retrieval context
+   - Fine-tune model parameters
+
+Conclusion
+==========
+Spring AI provides a powerful and flexible framework for building AI-powered applications. By combining it with vector stores and RAG techniques, you can create intelligent systems that leverage both the knowledge in your documents and the generative capabilities of modern AI models.
+
+For more information, visit the official Spring AI documentation and explore the various examples and tutorials available.
