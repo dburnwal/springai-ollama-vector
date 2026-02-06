@@ -1,4 +1,4 @@
-# Ollama Demo
+# OllamaVectorHub
 
 A Spring Boot application that demonstrates integration with Ollama AI using Spring AI framework. This application provides multiple interfaces for interacting with AI models, including chat, RAG (Retrieval Augmented Generation), and document querying capabilities.
 
@@ -42,7 +42,7 @@ Before running this application, ensure you have:
 
 ```bash
 git clone <repository-url>
-cd ollama-demo
+cd spring-ollama-vector
 ```
 
 ### 2. Install and Configure Ollama
@@ -98,7 +98,7 @@ mvn spring-boot:run
 Alternatively, you can run the JAR file:
 
 ```bash
-java -jar target/ollama-demo-0.0.1-SNAPSHOT.jar
+java -jar target/spring-ollama-vector-0.0.1-SNAPSHOT.jar
 ```
 
 ## Using the Application
@@ -126,7 +126,7 @@ The application provides multiple interfaces:
 ## Project Structure
 
 ```
-ollama-demo/
+spring-ollama-vector/
 ├── src/
 │   ├── main/
 │   │   ├── java/

@@ -1,4 +1,4 @@
-# Spring AI RAG Implementation with ChromaDB Vector Database
+# OllamaVectorHub - Spring AI RAG Implementation with ChromaDB
 
 This project demonstrates how to implement Retrieval Augmented Generation (RAG) using Spring AI 1.1.2 with ChromaDB, an open-source vector database.
 

@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.dburnwal.springai</groupId>
-	<artifactId>ollama-demo</artifactId>
+	<artifactId>spring-ollama-vector</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ollama-demo</name>
-	<description>Ollama Demo</description>
+	<name>OllamaVectorHub</name>
+	<description>OllamaVectorHub - Spring AI with ChromaDB Vector Store</description>
 
 	<properties>
 		<java.version>21</java.version>
