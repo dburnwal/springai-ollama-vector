@@ -1,6 +1,8 @@
 # OllamaVectorHub
 
-A Spring Boot application that demonstrates integration with Ollama AI using Spring AI framework. This application provides multiple interfaces for interacting with AI models, including chat, RAG (Retrieval Augmented Generation), and document querying capabilities.
+A Spring Boot application that demonstrates integration with Ollama AI using Spring AI framework. This application
+provides multiple interfaces for interacting with AI models, including chat, RAG (Retrieval Augmented Generation), and
+document querying capabilities.
 
 ## Features
 
@@ -108,18 +110,21 @@ java -jar target/spring-ollama-vector-0.0.1-SNAPSHOT.jar
 The application provides multiple interfaces:
 
 ### Chat Interface
+
 1. Open your web browser and navigate to: `http://localhost:8080/`
 2. Type your question in the input field
 3. Click the "Send" button
 4. The AI response will be displayed below your question with proper Markdown formatting
 
 ### RAG Demo Interface
+
 1. Open your web browser and navigate to: `http://localhost:8080/rag-demo`
 2. Type your question in the input field
 3. Click the "Submit" button
 4. The AI will retrieve relevant documents from ChromaDB and generate a response based on that context
 
 ### Ask Anything Interface
+
 1. Open your web browser and navigate to: `http://localhost:8080/showAskAnything`
 2. Type your question in the input field
 3. Click the "Ask" button
@@ -161,58 +166,72 @@ spring-ollama-vector/
 ## Key Components
 
 ### OllamaDemoApplication
+
 The main Spring Boot application class that initializes the application context.
 
 ### Controllers
 
 #### WebController
+
 Handles web page navigation:
+
 - GET `/` - Displays the chat interface
 - GET `/rag-demo` - Displays the RAG demo interface
 
 #### RAGController
+
 REST API controller for RAG operations:
+
 - POST `/api/rag/query` - Query with RAG
 - POST `/api/rag/documents` - Add documents to the vector store
 - GET `/api/rag/search` - Perform similarity search
 
 #### ChatController
+
 REST API controller for chat operations:
+
 - POST `/api/chat` - Send a chat message
 - POST `/api/chat/with-tools` - Send a chat message with tool support
 
 #### AnswerAnyThingController
+
 Web controller for the Ask Anything feature:
+
 - GET `/showAskAnything` - Displays the Ask Anything interface
 - POST `/askAnything` - Processes user questions and returns AI responses
 
 ### Services
 
 #### OllamaService
+
 Service class that interacts with Ollama AI:
+
 - Uses Spring AI's ChatClient for generating responses
 - Implements chat memory using InMemoryChatMemory
 - Maintains conversation context across multiple requests
 
 #### RAGService
+
 Service class that implements RAG functionality:
+
 - Manages documents in ChromaDB vector store
 - Checks for existing documents to prevent duplicates
 - Performs similarity search and context-aware generation
 
 ## RAG Implementation Details
 
-This project demonstrates a comprehensive Retrieval Augmented Generation (RAG) implementation using Spring AI with ChromaDB.
+This project demonstrates a comprehensive Retrieval Augmented Generation (RAG) implementation using Spring AI with
+ChromaDB.
 
 ### How RAG Works
 
 1. **Document Ingestion**: Documents are split into chunks and converted to embeddings using Ollama's embedding model
 2. **Vector Storage**: Embeddings are stored in ChromaDB vector database
 3. **Query Processing**: When a query is received:
-   - The query is converted to an embedding
-   - Similar documents are retrieved from ChromaDB
-   - Retrieved documents are used as context for the LLM
-   - The LLM generates a response based on the context
+    - The query is converted to an embedding
+    - Similar documents are retrieved from ChromaDB
+    - Retrieved documents are used as context for the LLM
+    - The LLM generates a response based on the context
 
 ### Customization Options
 
@@ -222,10 +241,12 @@ You can add your own documents through the REST API or by modifying the `DataIni
 
 ```java
 List<Document> customDocuments = List.of(
-    new Document("Your custom content here",
-        Map.of("type", "custom", "category", "general"))
+        new Document("Your custom content here",
+                Map.of("type", "custom", "category", "general"))
 );
-ragService.addDocuments(customDocuments);
+ragService.
+
+addDocuments(customDocuments);
 ```
 
 #### Adjusting Retrieval Parameters
@@ -234,15 +255,16 @@ Modify the search parameters in `RAGService.java`:
 
 ```java
 List<Document> similarDocuments = vectorStore.similaritySearch(
-    SearchRequest.query(userQuery)
-        .withTopK(4)  // Number of documents to retrieve
-        .withSimilarityThreshold(0.75)  // Minimum similarity score
+        SearchRequest.query(userQuery)
+                .withTopK(4)  // Number of documents to retrieve
+                .withSimilarityThreshold(0.75)  // Minimum similarity score
 );
 ```
 
 ### API Examples
 
 #### Query with RAG
+
 ```bash
 POST /api/rag/query
 Content-Type: application/json
@@ -252,6 +274,7 @@ Content-Type: application/json
 ```
 
 #### Add Documents
+
 ```bash
 POST /api/rag/documents
 Content-Type: application/json
@@ -265,6 +288,7 @@ Content-Type: application/json
 ```
 
 #### Similarity Search
+
 ```bash
 GET /api/rag/search?query=Spring%20AI&topK=5
 ```
@@ -272,29 +296,39 @@ GET /api/rag/search?query=Spring%20AI&topK=5
 ### Configuration
 
 #### ChromaConfig
+
 Configures ChromaDB vector store:
+
 - Creates the collection if it doesn't exist
 - Sets up connection parameters
 
 #### DataInitializer
+
 Initializes the application with sample documents:
+
 - Checks if documents already exist before adding
 - Prevents duplicate data on application restart
 
 ### Templates
 
 #### chat.html
+
 Thymeleaf template for the chat interface:
+
 - Provides a clean UI for chat interactions
 - Displays AI responses with Markdown rendering
 
 #### rag-demo.html
+
 Thymeleaf template for the RAG demo interface:
+
 - Provides a UI for RAG queries
 - Shows retrieved documents alongside AI responses
 
 #### askAnything.html
+
 Thymeleaf template for the Ask Anything interface:
+
 - Provides a clean UI for asking questions
 - Displays AI responses with Markdown rendering
 - Uses Showdown.js for client-side Markdown to HTML conversion
@@ -328,21 +362,25 @@ spring.ai.ollama.chat.options.max-tokens=1000
 ## Troubleshooting
 
 ### ChromaDB Connection Issues
+
 - Ensure ChromaDB is running on port 8000
 - Verify the host and port configuration in application.properties
 - Check if the collection exists in ChromaDB
 
 ### Ollama Connection Issues
+
 - Ensure Ollama service is running: `ollama serve`
 - Verify the base URL in application.properties matches your Ollama installation
 - Check that the specified model is available: `ollama list`
 
 ### Document Initialization Issues
+
 - If documents are not being initialized, check the application logs
 - The application will skip initialization if documents already exist
 - To force re-initialization, clear the collection in ChromaDB
 
 ### Build Issues
+
 - Ensure you're using Java 21 or higher: `java -version`
 - Verify Maven is properly installed: `mvn -version`
 - Try cleaning the project: `mvn clean install`

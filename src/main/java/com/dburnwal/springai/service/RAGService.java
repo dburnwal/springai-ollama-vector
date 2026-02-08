@@ -2,6 +2,7 @@ package com.dburnwal.springai.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.ai.chat.client.ChatClient;
@@ -28,10 +29,12 @@ public class RAGService {
 
 
     /**
-     * Add documents to the vector store
+     * Add documents to the vector store with automatic chunking
      */
     public void addDocuments(List<Document> documents) {
-        vectorStore.add(documents);
+        TokenTextSplitter tokenTextSplitter = new TokenTextSplitter(100, 10, 5, 1000, true);
+        List<Document> splitDocuments = tokenTextSplitter.apply(documents);
+        vectorStore.add(splitDocuments);
     }
 
     /**

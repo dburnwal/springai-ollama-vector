@@ -1,4 +1,3 @@
-
 package com.dburnwal.springai.controller;
 
 import org.springframework.stereotype.Controller;

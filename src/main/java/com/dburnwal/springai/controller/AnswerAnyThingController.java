@@ -15,19 +15,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 public class AnswerAnyThingController {
 
-	@Autowired
+    @Autowired
     private OllamaService service;
 
     @GetMapping("/showAskAnything")
     public String showAskAnything() {
-         return "askAnything";
+        return "askAnything";
     }
 
     @PostMapping("/askAnything")
     public String askAnything(@RequestParam("question") String question, Model model) {
-    	ChatResponse response = service.generateAnswer(question);
-    	model.addAttribute("question",question);
-    	model.addAttribute("answer",response.getResult().getOutput().getText());
+        ChatResponse response = service.generateAnswer(question);
+        model.addAttribute("question", question);
+        model.addAttribute("answer", response.getResult().getOutput().getText());
         return "askAnything";
     }
 }

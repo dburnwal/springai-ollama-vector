@@ -1,4 +1,3 @@
-
 package com.dburnwal.springai.tools;
 
 import lombok.extern.slf4j.Slf4j;
@@ -13,17 +12,11 @@ import java.util.Random;
 @Slf4j
 public class WeatherService {
 
-    // Request classes for function calling
-    public record WeatherRequest(String location) {}
-
-    public record ForecastRequest(String location, int days) {}
-
-
     private final Random random = new Random();
 
     /**
      * Get the current weather for a specific location
-     * 
+     *
      * @param location The city name
      * @return Current weather information including temperature and conditions
      */
@@ -40,9 +33,9 @@ public class WeatherService {
 
     /**
      * Get weather forecast for the next few days
-     * 
+     *
      * @param location The city name
-     * @param days Number of days to forecast (1-7)
+     * @param days     Number of days to forecast (1-7)
      * @return Weather forecast for the specified number of days
      */
     @Tool(name = "forecast", description = "Get weather forecast for the next few days")
@@ -64,9 +57,15 @@ public class WeatherService {
         return forecast;
     }
 
-
     private String getRandomCondition() {
         String[] conditions = {"Sunny", "Cloudy", "Rainy", "Partly Cloudy", "Windy"};
         return conditions[random.nextInt(conditions.length)];
+    }
+
+    // Request classes for function calling
+    public record WeatherRequest(String location) {
+    }
+
+    public record ForecastRequest(String location, int days) {
     }
 }

@@ -1,22 +1,15 @@
-
 package com.dburnwal.springai.tools;
 
-import org.springframework.stereotype.Component;
 import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.stereotype.Component;
 
 @Component
 
 public class CalculatorService {
 
-    // Request classes for function calling
-    public record CalculationRequest(double a, double b) {}
-
-    public record SingleNumberRequest(double number) {}
-
-
     /**
      * Add two numbers together
-     * 
+     *
      * @param a First number
      * @param b Second number
      * @return Sum of a and b
@@ -28,7 +21,7 @@ public class CalculatorService {
 
     /**
      * Subtract second number from first number
-     * 
+     *
      * @param a First number
      * @param b Second number
      * @return Difference of a and b
@@ -40,7 +33,7 @@ public class CalculatorService {
 
     /**
      * Multiply two numbers
-     * 
+     *
      * @param a First number
      * @param b Second number
      * @return Product of a and b
@@ -52,7 +45,7 @@ public class CalculatorService {
 
     /**
      * Divide first number by second number
-     * 
+     *
      * @param a First number (dividend)
      * @param b Second number (divisor)
      * @return Quotient of a and b
@@ -68,8 +61,8 @@ public class CalculatorService {
 
     /**
      * Calculate the power of a number
-     * 
-     * @param base The base number
+     *
+     * @param base     The base number
      * @param exponent The exponent
      * @return base raised to the power of exponent
      */
@@ -80,7 +73,7 @@ public class CalculatorService {
 
     /**
      * Calculate the square root of a number
-     * 
+     *
      * @param number The number to calculate the square root of
      * @return Square root of the number
      * @throws IllegalArgumentException if number is negative
@@ -91,5 +84,12 @@ public class CalculatorService {
             throw new IllegalArgumentException("Cannot calculate square root of negative number");
         }
         return Math.sqrt(number);
+    }
+
+    // Request classes for function calling
+    public record CalculationRequest(double a, double b) {
+    }
+
+    public record SingleNumberRequest(double number) {
     }
 }
